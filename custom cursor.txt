@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Image Cursor</title>
+  <style>
+    /* 
+    ==========================================
+    CUSTOM IMAGE CURSOR SYSTEM
+    ==========================================
+    This replaces the system cursor with ANY images you want.
+    - One image for the "normal" state
+    - Another image for the "hover" state
+    Includes bounce, glow, squash/stretch and click effects.
+    ==========================================
+    */
+
+    /* Hide the default cursor everywhere */
+    * {
+      cursor: none !important;
+    }
+
+    /* Main container that follows the mouse */
+    .custom-cursor {
+      position: fixed;          /* stays relative to viewport */
+      top: 0;
+      left: 0;
+      pointer-events: none;     /* cursor won't block clicks */
+      transform: translate(-50%, -50%); /* center images */
+      z-index: 9999;            /* always on top */
+    }
+
+    /* Inner wrapper: applies physics & click animations */
+    .cursor-wrapper {
+      width: 40px;   /* change size of cursor here */
+      height: 40px;
+    }
+
+    /* Both cursor images share these */
+    .cursor-normal,
+    .cursor-hover {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 0;                /* start invisible */
+      transition: opacity 0.25s ease;
+    }
+
+    /* Normal cursor image (active by default) */
+    .cursor-normal.active {
+      opacity: 1;
+      animation: bounceGlow 1.5s infinite ease-in-out;
+    }
+
+    /* Hover cursor image (only shows when hovering links/buttons/etc.) */
+    .cursor-hover.active {
+      opacity: 1;
+      animation: hoverSquashStretch 0.4s ease,
+                 hoverGlow 1.5s infinite ease-in-out,
+                 hoverLoopBounce 2s infinite ease-in-out;
+    }
+
+    /* === ANIMATIONS === */
+
+    /* Idle bounce + glow for normal state */
+    @keyframes bounceGlow {
+      0%, 100% {
+        transform: scale(1) translateY(0);
+        filter: drop-shadow(0 0 6px #4db8ff);
+      }
+      50% {
+        transform: scale(1.1) translateY(-3px);
+        filter: drop-shadow(0 0 12px #66ccff);
+      }
+    }
+
+    /* Quick squash/stretch effect when switching to hover */
+    @keyframes hoverSquashStretch {
+      0%   { transform: scale(0.7, 1.3); }
+      40%  { transform: scale(1.3, 0.7); }
+      70%  { transform: scale(0.9, 1.1); }
+      100% { transform: scale(1, 1); }
+    }
+
+    /* Glow pulse effect for hover image */
+    @keyframes hoverGlow {
+      0%, 100% { filter: drop-shadow(0 0 6px #ffd966); }
+      50%      { filter: drop-shadow(0 0 12px #ffff99); }
+    }
+
+    /* Gentle bounce loop while hovering */
+    @keyframes hoverLoopBounce {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-3px) scale(1.05); }
+    }
+
+    /* Click squash animation */
+    .cursor-wrapper.click {
+      animation: clickBounce 0.3s ease;
+    }
+    @keyframes clickBounce {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(0.75, 1.25); }
+      100% { transform: scale(1.1, 0.9); }
+    }
+  </style>
+
+
+</head>
+<body>
+
+  <!-- ========================================== 
+       IGNORE BELOW - DEMO CONTENT ONLY
+       ==========================================
+        -->
+  <h1 style="text-align: center;">Custom Image Cursor Demo</h1>
+  <p style="text-align: center;">Hover the button to see the hover image.</p>
+  <button style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);
+  padding: 10px; border: none; border-radius: 6px; background: #444; color: #fff; font-size: 1.1em; text-decoration: none; transition: background 0.3s;">Click Me</button>
+ <!-- ========================================== 
+       END DEMO CONTENT
+       ==========================================  -->
+
+
+  <!-- ==========================================
+       CURSOR HTML, WELL I GUESS YOU KNOW WHAT TO DO
+       COPY/PASTE YOUR IMAGE LINKS IN SRC="___"          FOR DEMO I USED MY OWN IMAGES 
+       - Place two <img> tags:
+         1. Normal image (GIF/PNG/SVG)
+         2. Hover image (PNG/SVG recommended)
+       ========================================== -->
+  <div class="custom-cursor">
+    <div class="cursor-wrapper">
+      <img src="https://raw.githubusercontent.com/raggynexli/raggy/1c9e62b8a35dd149de699316d799771fb1837d1a/ezgif.com-animated-gif-maker%203.gif" class="cursor-normal active">
+      <img src="https://raw.githubusercontent.com/raggynexli/raggy/1c9e62b8a35dd149de699316d799771fb1837d1a/0BE0C1AB-6AED-4E69-8263-35AC5176FA8E.PNG" class="cursor-hover">
+    </div>
+  </div>
+
+  <script>
+    /*
+    ==========================================
+    CURSOR SCRIPT
+    Handles:
+    - Following the mouse
+    - Switching between normal/hover images
+    - Playing click animation
+    ==========================================
+    */
+
+    // Select elements
+    const cursor = document.querySelector(".custom-cursor");
+    const wrapper = document.querySelector(".cursor-wrapper");
+    const normal  = document.querySelector(".cursor-normal");
+    const hover   = document.querySelector(".cursor-hover");
+
+    // 1. Make cursor follow the mouse
+    document.addEventListener("mousemove", e => {
+      cursor.style.left = e.pageX + "px";
+      cursor.style.top  = e.pageY + "px";
+    });
+
+    // 2. Switch to hover image when over links/buttons/etc.
+    document.querySelectorAll("a, button, input, textarea, select")
+    .forEach(el => {
+      el.addEventListener("mouseenter", () => {
+        normal.classList.remove("active");
+        hover.classList.add("active");
+      });
+      el.addEventListener("mouseleave", () => {
+        hover.classList.remove("active");
+        normal.classList.add("active");
+      });
+    });
+
+    // 3. Play click bounce animation
+    document.addEventListener("mousedown", () => {
+      wrapper.classList.add("click");
+      setTimeout(() => wrapper.classList.remove("click"), 300);
+    });
+  </script>
+</body>
+</html>
