@@ -1,4 +1,4 @@
-# 🚦Custom Image Cursor
+# 🚦Custom Cursor
 
 Replace your boring system cursor with fun images (GIF, PNG, SVG) and add:
 
