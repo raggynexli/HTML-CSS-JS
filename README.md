@@ -1,6 +1,7 @@
 # 🚦Custom Image Cursor
 
 Replace your boring system cursor with fun images (GIF, PNG, SVG) and add:
+
 ✨ Bounce  
 ✨ Glow  
 ✨ Squash & Stretch  
